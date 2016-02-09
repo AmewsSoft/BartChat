@@ -17,12 +17,13 @@ import java.util.Random;
 import amewssoft.bartchat.ChatAdapter;
 import amewssoft.bartchat.ChatMessage;
 import amewssoft.bartchat.CommonMethods;
+import amewssoft.bartchat.MainActivity;
 import amewssoft.bartchat.R;
 
 public class Chats extends Fragment implements OnClickListener {
 
     private EditText msg_edittext;
-    private String user1 = "khushi", user2 = "khushi1";
+    private String user1 = "khushi", user2 = "khushi";// chating with self
     private Random random;
     public static ArrayList<ChatMessage> chatlist;
     public static ChatAdapter chatAdapter;
@@ -67,6 +68,8 @@ public class Chats extends Fragment implements OnClickListener {
             msg_edittext.setText("");
             chatAdapter.add(chatMessage);
             chatAdapter.notifyDataSetChanged();
+            MainActivity activity = ((MainActivity) getActivity());
+            activity.getmService().xmpp.sendMessage(chatMessage);
         }
     }
 
