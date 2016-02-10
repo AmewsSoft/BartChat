@@ -36,9 +36,9 @@ public class MainActivity extends ActionBarActivity implements
 
         @SuppressWarnings("unchecked")
         @Override
-        public void onServiceConnected(final ComponentName name,
-                                       final IBinder service) {
-            mService = ((LocalBinder<MyService>) service).getService();
+        public void onServiceConnected(ComponentName componentname, IBinder ibinder)
+        {
+            mService = (MyService)((LocalBinder)ibinder).getService();
             mBounded = true;
             Log.d(TAG, "onServiceConnected");
         }

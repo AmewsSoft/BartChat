@@ -1,18 +1,20 @@
 package amewssoft.bartchat;
 
 import android.os.Binder;
-
 import java.lang.ref.WeakReference;
 
-public class LocalBinder<S> extends Binder {
-    private final WeakReference<S> mService;
+public class LocalBinder extends Binder
+{
 
-    public LocalBinder(final S service) {
-        mService = new WeakReference<S>(service);
+    private final WeakReference mService;
+
+    public LocalBinder(Object obj)
+    {
+        mService = new WeakReference(obj);
     }
 
-    public S getService() {
+    public Object getService()
+    {
         return mService.get();
     }
-
 }

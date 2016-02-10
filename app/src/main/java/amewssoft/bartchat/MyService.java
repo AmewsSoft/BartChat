@@ -8,48 +8,62 @@ import android.os.IBinder;
 
 import org.jivesoftware.smack.chat.Chat;
 
-public class MyService extends Service {
+// Referenced classes of package amewssoft.bartchat:
+//            LocalBinder, MyXMPP
+
+public class MyService extends Service
+{
+
     private static final String DOMAIN = "xmpp.jp";
-    private static final String USERNAME = "khushi";
     private static final String PASSWORD = "password";
+    public static boolean ServerchatCreated = false;
+    private static final String USERNAME = "khushi";
     public static ConnectivityManager cm;
     public static MyXMPP xmpp;
-    public static boolean ServerchatCreated = false;
-    String text = "";
+    public Chat chat;
+    String text;
 
-    @Override
-    public IBinder onBind(final Intent intent) {
-        return new LocalBinder<MyService>(this);
+    public MyService()
+    {
+        text = "";
     }
 
-    public Chat chat;
+    public static boolean isNetworkConnected()
+    {
+        return cm.getActiveNetworkInfo() != null;
+    }
 
-    @Override
-    public void onCreate() {
+    public IBinder onBind(Intent intent)
+    {
+        return new LocalBinder(this);
+    }
+
+    public void onCreate()
+    {
         super.onCreate();
-        cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        xmpp = MyXMPP.getInstance(MyService.this, DOMAIN, USERNAME, PASSWORD);
+        cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        xmpp = MyXMPP.getInstance(this, "xmpp.jp", "khushi", "password");
         xmpp.connect("onCreate");
     }
 
-    @Override
-    public int onStartCommand(final Intent intent, final int flags,
-                              final int startId) {
-        return Service.START_NOT_STICKY;
+    public void onDestroy()
+    {
+        super.onDestroy();
+        MyXMPP.connection.disconnect();
     }
 
-    @Override
-    public boolean onUnbind(final Intent intent) {
+    public int onStartCommand(Intent intent, int i, int j)
+    {
+        return 2;
+    }
+
+    public boolean onUnbind(Intent intent)
+    {
         return super.onUnbind(intent);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        xmpp.connection.disconnect();
-    }
-
-    public static boolean isNetworkConnected() {
-        return cm.getActiveNetworkInfo() != null;
+    static
+    {
+        ServerchatCreated = false;
     }
 }
